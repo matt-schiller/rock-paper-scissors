@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Rock Paper Scissors | A Multiplayer Game</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+<!-- 	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"> -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.css">
+	<link rel="stylesheet" href="assets/css/style.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+	<!-- <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.19.4/moment.min.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/4.8.0/firebase.js"></script>
+	<script src="https://cdn.firebase.com/libs/firebaseui/2.5.1/firebaseui.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg fixed-top">
+	<div class="container">
+		<a class="navbar-brand d-flex align-items-center" href="#">
+		<!-- <img class="logo" src="assets/images/snapprlogo-dark-500px.png" height="25" alt=""> -->
+			Rock Paper Scissors
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<!-- <li class="nav-item">
+					<a class="nav-link" href="#">Link</a>
+				</li> -->
+			</ul>
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" id="user-email"></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="logout" href="#">Logout</a>
+				</li>
+			</ul>			
+		</div>
+	</div>
+</nav>
+<div class="container my-4">
+	<div class="row">
+		<div class="col-4">
+			<div class="card">
+				<div class="card-header text-white bg-primary">Player 1: <span id="p1-name"> </span></div>
+				<div class="card-body" id="p1-choices">
+					<h4 class="card-title">Choose your play</h4>
+					<div class="row">
+						<div class="col-4">
+							<img class="img-thumbnail" id="p1-rock" src="assets/images/rock.svg">
+						</div>
+						<div class="col-4">
+							<img class="img-thumbnail" id="p1-paper" src="assets/images/paper.svg">
+						</div>
+						<div class="col-4">
+							<img class="img-thumbnail" id="p1-scissors" src="assets/images/scissors.svg">
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+						
+					<div class="row">
+						<div class="col-6">
+							<h4 class="card-title">Wins</h4>
+							<p id="p1-wins">-</p>
+						</div>
+						<div class="col-6">
+							<h4 class="card-title">Losses</h4>
+							<p id="p1-losses">-</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-4">
+			<div class="card">
+				<div class="card-header text-white bg-primary">Status</div>
+				<div class="card-body">
+					<h4 class="card-title" id="status">Waiting for both players to choose</h4>
+					<p class="card-title" id="last-game">No games have been played yet</p>
+				</div>
+			</div>
+			<div class="card my-3">
+				<div class="card-body">
+					<p>There are currently <span id="user-count">-</span> user(s) online</p>
+				</div>
+			</div>
+			<div class="alert alert-warning alert-info">
+				<button type="button" class="close" data-dismiss="alert">&times;</button>
+				<strong>In case you were wondering...</strong> the game (and scoreboard) can be reset if either player refreshes their browser window.
+			</div>
+		</div>
+		<div class="col-4">
+			<div class="card">
+				<div class="card-header text-white bg-primary">Player 2: <span id="p2-name"> </span></div>
+				<div class="card-body" id="p2-choices">
+					<h4 class="card-title">Choose your play</h4>
+					<div class="row">
+						<div class="col-4">
+							<img class="img-thumbnail" id="p2-rock" src="assets/images/rock.svg">
+						</div>
+						<div class="col-4">
+							<img class="img-thumbnail" id="p2-paper" src="assets/images/paper.svg">
+						</div>
+						<div class="col-4">
+							<img class="img-thumbnail" id="p2-scissors" src="assets/images/scissors.svg">
+						</div>
+					</div>
+				</div>
+				<div class="card-body">
+						
+					<div class="row">
+						<div class="col-6">
+							<h4 class="card-title">Wins</h4>
+							<p id="p2-wins">-</p>
+						</div>
+						<div class="col-6">
+							<h4 class="card-title">Losses</h4>
+							<p id="p2-losses">-</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal" id="clear-modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+			<p>Message</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary">Okay</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="assets/js/gathering.js"></script><!-- https://gist.github.com/ajaxray/17d6ec5107d2f816cc8a284ce4d7242e -->
+<script src="assets/js/index.js"></script>
+</body>
+</html>

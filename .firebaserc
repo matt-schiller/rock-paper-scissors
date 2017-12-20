@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "default": "photography-lead-finder",
+    "rock-paper-scissors": "multiplayer-rps-game"
+  }
+}
